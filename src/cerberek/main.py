@@ -31,7 +31,7 @@ action = os.getenv('ACTION', 'kick').lower()
 if action not in ['kick', 'readonly']:
     logger.warning("Invalid action: %s. Defaulting to 'kick'.", action)
     action = 'kick'
-if action == 'radonly':
+if action == 'readonly':
     logger.warning("Action set to 'readonly'. Users will not be kicked, but messages will be deleted.")
     readonly_days = os.getenv('READONLY_DAYS', '7')
     try:
