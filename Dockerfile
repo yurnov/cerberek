@@ -47,4 +47,4 @@ RUN pip install --no-cache-dir /wheels/* && \
     rm -fr /wheels
 
 # Run app
-CMD ["python3", "-m", "cerberek.main"]
+CMD ["python", "-m", "cerberek.main"]

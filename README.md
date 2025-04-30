@@ -1,10 +1,10 @@
-# Сerberek
+# Cerberek
 
-The name of this Telegram antispam bot is inspired by the name of name of Cerberus from the Greek mythology. Can be also named Cerbuś.
+The name of this Telegram antispam bot is inspired by Cerberus from Greek mythology. It can also be referred to as Cerbuś.
 
 This repository contains a Telegram bot configured to monitor a specific group chat. The bot reads all messages, checks for keywords, deletes messages containing those keywords, and bans the user who sent them.
 
-Messages from the admin of the chat are unfiltered.
+Messages from the chat admin are unfiltered.
 
 ## Features
 
@@ -25,67 +25,67 @@ Messages from the admin of the chat are unfiltered.
 
 1. Clone the repository:
 
-```sh
-git clone https://github.com/yurnov/cerberek.git
-cd cerberek
-```
+    ```sh
+    git clone https://github.com/yurnov/cerberek.git
+    cd cerberek
+    ```
 
 2. Create a `.env` file with the following content:
 
-```env
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-GROUP_CHAT_ID=your_group_chat_id
-```
+    ```env
+    TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+    GROUP_CHAT_ID=your_group_chat_id
+    ```
 
-3. Create a `keywords.yaml` with keywords:
-```
-keywords:
-  - spam
-  - scam
-  - phishing
-  - malware
-  - virus
-  - hack
-  - fraud
-  - fake
-  - illegal
-  - offensive
-```
+3. Create a `keywords.yaml` file with the following content:
 
-3. Build the Docker image:
+    ```yaml
+    keywords:
+      - spam
+      - scam
+      - phishing
+      - malware
+      - virus
+      - hack
+      - fraud
+      - fake
+      - illegal
+      - offensive
+    ```
 
-```sh
-docker build -t yurnov/cerberek .
-```
+4. Build the Docker image:
 
-4. Run the Docker container:
+    ```sh
+    docker build -t yurnov/cerberek .
+    ```
 
-```sh
-docker run --env-file .env -v ./keywords.yaml:/app/keywords.yaml yurnov/cerberek.git
-```
+5. Run the Docker container:
+
+    ```sh
+    docker run --env-file .env -v ./keywords.yaml:/app/keywords.yaml yurnov/cerberek
+    ```
 
 ## Local Development
 
 1. Install dependencies:
 
-```sh
-pip pip wheel --no-deps .
-pip install --no-cache-dir *
-
-```
+    ```sh
+    pip install wheel --no-deps .
+    pip install --no-cache-dir -r requirements.txt
+    ```
 
 2. Run the bot:
 
-```sh
-python -m cerberek.main"
-```
+    ```sh
+    python -m cerberek.main
+    ```
 
-## TODO:
+## TODO
 
-- Add configirable quarantine (i.e. set read-only for configurable period);
-- Improve bot configuration;
-- Move keyword list from the YAML file to some more proper location
-- Improve CI part
+- Add configurable quarantine (e.g., set read-only mode for a configurable period)
+- Improve bot configuration
+- Move the keyword list from the YAML file to a more appropriate location
+- Enhance CI/CD pipeline
 
 ## Contributing
 
@@ -94,4 +94,3 @@ Feel free to open issues or submit pull requests if you have any improvements or
 ## License
 
 This project is licensed under the MIT License.
-
