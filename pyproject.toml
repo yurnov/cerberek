@@ -1,0 +1,50 @@
+[build-system]
+requires = [
+  "setuptools>=61.0"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cerberek-telegram-antispam"
+version = "0.1.0-a1"
+description = "Telegram antispam bot inspired by the name of name of Cerberus from the Greek mythology."
+authors = [
+    { name="Yuriy Novostavskiy", email="yuriy@novostavskiy.kyiv.ua" }
+]
+dependencies = [
+    "python-telegram-bot==22.0",
+    "python-dotenv==1.1.0",
+    "PyYAML==6.0.2"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black==25.1.0",
+    "coverage==7.8.0",
+    "isort[colors]==6.0.1",
+    "pylint==3.3.6"
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py313']
+extend-exclude = '/(build|venv)/'
+
+[tool.isort]
+profile = "black"
+atomic = true
+color_output = true
+only_modified = true
+line_length = 120
+skip = [
+    "build/",
+    "venv"
+]
+# `source = "runtime"` is optional if you want to specify the root to isort;
+# you can remove or rename as needed.
+source = "runtime"
+
+[tool.pylint.main]
+fail-under = 9.5
+jobs = 0
+persistent = false
