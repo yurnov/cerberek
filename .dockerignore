@@ -1,0 +1,10 @@
+.env
+.env*
+Dockerfile
+docker-compose.yml
+.dockerignore
+.github
+.git
+.gitignore
+.vscode
+.pylintrc
