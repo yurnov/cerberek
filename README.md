@@ -2,24 +2,25 @@
 
 The name of this Telegram antispam bot is inspired by Cerberus from Greek mythology. It can also be referred to as Cerbuś.
 
-This repository contains a Telegram bot configured to monitor a specific group chat. The bot reads all messages, checks for keywords, deletes messages containing those keywords, and bans the user who sent them.
+This repository contains a Telegram bot configured to monitor a specific group chat. The bot reads all messages, checks for keywords, deletes messages containing those keywords, and bans the users who sent them.
 
 Messages from the chat admin are unfiltered.
 
 ## Features
 
-- Reads messages from a specific group chat
-- Deletes messages containing keywords from a list
-- Bans users who send messages with keywords
-- Unfiltered messages from chat admins
-- Configurable via environment variables
-- Deployed using Docker
+- Reads messages from a specific group chat.
+- Deletes messages containing keywords from a list.
+- Bans users who send messages with keywords.
+- Allows unfiltered messages from chat admins.
+- Configurable via environment variables.
+- Deployable using Docker.
 
 ## Prerequisites
 
 - Docker
 - Telegram bot token
 - Group chat ID
+- Bot must have admin privileges in the chat
 
 ## Setup
 
@@ -36,6 +37,8 @@ Messages from the chat admin are unfiltered.
     TELEGRAM_BOT_TOKEN=your_telegram_bot_token
     GROUP_CHAT_ID=your_group_chat_id
     ```
+
+   Optionally, you can configure the action (kick or read-only) and log level. Refer to the `.env.example` file for an example.
 
 3. Create a `keywords.yaml` file with the following content:
 
@@ -82,10 +85,10 @@ Messages from the chat admin are unfiltered.
 
 ## TODO
 
-- Add configurable quarantine (e.g., set read-only mode for a configurable period)
-- Improve bot configuration
-- Move the keyword list from the YAML file to a more appropriate location
-- Enhance CI/CD pipeline
+- Add configurable quarantine (e.g., set read-only mode for a configurable period).
+- Improve bot configuration.
+- Move the keyword list from the YAML file to a more appropriate location.
+- Enhance the CI/CD pipeline.
 
 ## Contributing
 

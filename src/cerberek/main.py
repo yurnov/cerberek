@@ -8,6 +8,7 @@ and sets up handlers to monitor and manage messages in a Telegram group chat.
 import logging
 import os
 import sys
+from datetime import datetime, timedelta
 
 import yaml
 from dotenv import load_dotenv
@@ -27,6 +28,23 @@ token = os.getenv('TELEGRAM_BOT_TOKEN')
 group_chat_id = os.getenv('GROUP_CHAT_ID')
 logging_level = os.getenv('LOGGING_LEVEL', 'INFO').upper()
 logger.info("Telegram Bot Token: <censored>, Group Chat ID: %s, Loggin level %s", group_chat_id, logging_level)
+action = os.getenv('ACTION', 'kick').lower()
+if action not in ['kick', 'readonly']:
+    logger.warning("Invalid action: %s. Defaulting to 'kick'.", action)
+    action = 'kick'  # pylint: disable=C0103
+if action == 'readonly':
+    logger.warning("Action set to 'readonly'. Users will not be kicked, but messages will be deleted.")
+    readonly_days = os.getenv('READONLY_DAYS', '7')
+    try:
+        readonly_days = int(readonly_days)
+
+        if readonly_days < 1:
+            raise ValueError("READONLY_DAYS must be a positive integer.")
+        if readonly_days > 350:
+            raise ValueError("READONLY_DAYS must be less than 350 days.")
+    except ValueError:
+        logger.warning("Invalid READONLY_DAYS value: %s. Defaulting to 7 days.", readonly_days)
+        readonly_days = 7  # pylint: disable=C0103
 
 # Set logging level
 if logging_level in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']:
@@ -124,16 +142,46 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except Exception as e:  # pylint: disable=W0718
                 logger.error("Failed to delete message: %s", e)
 
-            try:
-                # Kick the user
-                await context.bot.ban_chat_member(chat_id=from_chat_id, user_id=from_user_id, revoke_messages=True)
-                logger.info(
-                    "User %s kicked for using keyword: %s",
-                    from_username,
-                    keyword,
-                )
-            except Exception as e:  # pylint: disable=W0718
-                logger.error("Failed to kick user: %s", e)
+            if action == 'readonly':
+                try:
+                    # Restrict the user to read-only mode
+                    await context.bot.restrict_chat_member(
+                        chat_id=from_chat_id,
+                        user_id=from_user_id,
+                        permissions={
+                            'can_send_messages': False,
+                            'can_send_media_messages': False,
+                            'can_send_polls': False,
+                            'can_send_other_messages': False,
+                            'can_add_web_page_previews': False,
+                            'can_invite_users': False,
+                            'can_pin_messages': False,
+                        },
+                        until_date=datetime.now()
+                        + timedelta(days=readonly_days),  # Restrict for the specified number of days
+                    )
+                    logger.info(
+                        "User %s restricted to read-only mode for %d days due to keyword: %s",
+                        from_username,
+                        readonly_days,
+                        keyword,
+                    )
+                except Exception as e:  # pylint: disable=W0718
+                    logger.error("Failed to restrict user: %s", e)
+                    return
+
+            elif action == 'kick':
+
+                try:
+                    # Kick the user
+                    await context.bot.ban_chat_member(chat_id=from_chat_id, user_id=from_user_id, revoke_messages=True)
+                    logger.info(
+                        "User %s kicked for using keyword: %s",
+                        from_username,
+                        keyword,
+                    )
+                except Exception as e:  # pylint: disable=W0718
+                    logger.error("Failed to kick user: %s", e)
 
 
 def main():
