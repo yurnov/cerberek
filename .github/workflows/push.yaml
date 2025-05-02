@@ -71,7 +71,7 @@ jobs:
             --build-arg CONTAINER_IMAGE_VERSION=$(cat pyproject.toml | grep '^version' | cut -f2 -d'=' | tr -d ' "') \
             --platform linux/amd64 \
             --tag ghcr.io/${{ github.repository }}:latest \
-            --tag ghcr.io/$$(cat pyproject.toml | grep '^version' | cut -f2 -d'=' | tr -d ' "'):latest \
+            --tag ghcr.io/${{ github.repository }}:$(cat pyproject.toml | grep '^version' | cut -f2 -d'=' | tr -d ' "') \
             --push .
 
       - name: Logout from GitHub Container Registry
