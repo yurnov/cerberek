@@ -63,8 +63,17 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+        # don't use docker/build-push-action to create a ARG
+        run: |
+          docker buildx build \
+            --build-arg VCS_REF=${{ github.sha }} \
+            --build-arg BUILD_DATETIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+            --build-arg CONTAINER_IMAGE_VERSION=$(cat pyproject.toml | grep '^version' | cut -f2 -d'=' | tr -d ' "') \
+            --platform linux/amd64 \
+            --tag ghcr.io/${{ github.repository }}:latest \
+            --tag ghcr.io/$$(cat pyproject.toml | grep '^version' | cut -f2 -d'=' | tr -d ' "'):latest \
+            --push .
+
+      - name: Logout from GitHub Container Registry
+        run: |
+          docker logout ghcr.io
