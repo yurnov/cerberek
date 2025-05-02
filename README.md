@@ -20,7 +20,7 @@ Messages from the chat admin are unfiltered.
 - Docker
 - Telegram bot token
 - Group chat ID
-- Bot must have admin privileges in the chat
+- Bot must have admin privileges in the chat.
 
 ## Setup
 
@@ -56,15 +56,23 @@ Messages from the chat admin are unfiltered.
       - offensive
     ```
 
-4. Build the Docker image:
+4. Pull the Docker image:
 
     ```sh
-    docker build -t yurnov/cerberek .
+    docker pull ghcr.io/yurnov/cerberek:latest
     ```
 
 5. Run the Docker container:
 
     ```sh
+    docker run -d --restart=unless-stopped --name=cerberek --env-file .env \
+    -v ./keywords.yaml:/app/keywords.yaml ghcr.io/yurnov/cerberek:latest
+    ```
+
+Alternatively, build and run your own image:
+
+    ```sh
+    docker build -t yurnov/cerberek .
     docker run --env-file .env -v ./keywords.yaml:/app/keywords.yaml yurnov/cerberek
     ```
 
@@ -85,8 +93,8 @@ Messages from the chat admin are unfiltered.
 
 ## TODO
 
-- Add configurable quarantine (e.g., set read-only mode for a configurable period).
 - Improve bot configuration.
+- Add a swear-word filter (replace swear words with alternatives).
 - Move the keyword list from the YAML file to a more appropriate location.
 - Enhance the CI/CD pipeline.
 
