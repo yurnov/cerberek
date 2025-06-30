@@ -12,15 +12,15 @@ authors = [
     { name="Yuriy Novostavskiy", email="yuriy@novostavskiy.kyiv.ua" }
 ]
 dependencies = [
-    "python-telegram-bot==22.1",
-    "python-dotenv==1.1.0",
+    "python-telegram-bot==22.2",
+    "python-dotenv==1.1.1",
     "PyYAML==6.0.2"
 ]
 
 [project.optional-dependencies]
 dev = [
     "black==25.1.0",
-    "coverage==7.8.2",
+    "coverage==7.9.1",
     "isort[colors]==6.0.1",
     "pylint==3.3.7"
 ]
